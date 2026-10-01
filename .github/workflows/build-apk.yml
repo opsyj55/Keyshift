@@ -28,6 +28,11 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
       - name: Extract Android project ZIP
         id: extract
         shell: bash
@@ -41,6 +46,8 @@ jobs:
             exit 1
           fi
 
+          echo "Found project ZIP: $ZIP_FILE"
+
           mkdir -p extracted
           unzip -q "$ZIP_FILE" -d extracted
 
@@ -52,6 +59,8 @@ jobs:
           fi
 
           echo "project_dir=$PROJECT_DIR" >> "$GITHUB_OUTPUT"
+
+          echo "Android project located at: $PROJECT_DIR"
 
       - name: Build APK
         working-directory: ${{ steps.extract.outputs.project_dir }}
